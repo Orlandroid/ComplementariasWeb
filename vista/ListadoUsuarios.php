@@ -24,9 +24,9 @@ include_once 'header.html';
         $usuario = new Usuario();
         if (isset($_REQUEST['busca'])) {
             $buscar = $_REQUEST['buscar'];
-            $usuario->obtener(true,$buscar);
-        }
-        $usuario->obtener(false,"");
+            $usuario->obtenerBuscando($buscar);
+        }else
+        $usuario->obtener();
         ?>
     </table>
 </div>

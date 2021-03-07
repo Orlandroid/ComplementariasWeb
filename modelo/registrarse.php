@@ -48,7 +48,7 @@ class HistorialActividades
         closeConexion($con); 
     }
 
-    public function obtener($buscando,$valor)
+    public function obtener()
     {
         include_once 'conexion.php';
         include_once 'validaSesion.php';
@@ -58,11 +58,48 @@ class HistorialActividades
         $consulta = "select c.idcredito,c.credito,c.fecha_reguistro,c.acreditado,c.semestre,a.nombre,a.numero_control,
         a.sexo,ac.nombre,i.nombre,ca.carrera
         from historial_actividades c, alumnos a , actividad ac , instructor i, carreras ca
-        where c.id_alumno=a.idalumnos and  c.id_actividad=ac.idactividad and ac.id_instructor=i.idinstructor and a.id_carrera=ca.idcarrera";
-        if ($buscando) {
-            $consulta = $consulta . " and c.fecha_reguistro like '%$valor%'";
+        where c.id_alumno=a.idalumnos and  c.id_actividad=ac.idactividad
+        and ac.id_instructor=i.idinstructor and a.id_carrera=ca.idcarrera order by a.numero_control";
+        $reguistros = mysqli_query($con, $consulta) or
+        die("Problema en la consulta" . mysqli_error($con));
+        while ($reg = mysqli_fetch_array($reguistros)) {
+            echo "<tr>";
+            echo "<td>" . $reg[0] . "</td>";
+            echo "<td>" . $reg[1] . "</td>";
+            echo "<td>" . $reg[2] . "</td>";
+            echo "<td>" . $reg[3] . "</td>";
+            echo "<td>" . $reg[4] . "</td>";
+            echo "<td>" . $reg[5] . "</td>";
+            echo "<td>" . $reg[6] . "</td>";
+            echo "<td>" . $reg[7] . "</td>";
+            echo "<td>" . $reg[8] . "</td>";
+            echo "<td>" . $reg[9] . "</td>";
+            echo "<td>" . $reg[10] . "</td>";
+            $idcredito = $reg[0];
+
+            echo "<td><a href='#' class='btn btn-primary $habilita' onclick='Editar($idcredito);'>actualizar</a>";
+            echo  " </td><td>  
+            <a href='Constancia.php?idCredito=$idcredito' class='btn btn-info $habilita'>
+            Generar Pdf</a> 
+            <td>  
+            <a href='frmEvaluacion.php?idCredito=$idcredito' class='btn btn-success $habilita'>
+            Evaluar</a> ";
+            echo "<tr>";
         }
-        $consulta = $consulta . " order by a.numero_control";
+        closeConexion($con);
+    }
+
+    public function obtenerBuscando($valor)
+    {
+        include_once 'conexion.php';
+        include_once 'validaSesion.php';
+        $session = new Session();
+        $habilita=$session->getHabilita();
+        $con = regresarConexion();
+        $consulta = "select c.idcredito,c.credito,c.fecha_reguistro,c.acreditado,c.semestre,a.nombre,a.numero_control,
+        a.sexo,ac.nombre,i.nombre,ca.carrera    from historial_actividades c, alumnos a , actividad ac , instructor i, carreras ca
+        where c.id_alumno=a.idalumnos and  c.id_actividad=ac.idactividad and ac.id_instructor=i.idinstructor and 
+        a.id_carrera=ca.idcarrera and c.fecha_reguistro like '%$valor%'  order by a.numero_control";
         $reguistros = mysqli_query($con, $consulta) or
         die("Problema en la consulta" . mysqli_error($con));
         while ($reg = mysqli_fetch_array($reguistros)) {

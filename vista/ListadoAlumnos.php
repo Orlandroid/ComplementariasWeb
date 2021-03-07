@@ -29,9 +29,9 @@ include_once '../modelo/alumnos.php';
         $alumno = new Alumnos();
         if (isset($_REQUEST['busca'])) {
             $buscar = $_REQUEST['buscar'];
-            $alumno->obtener(true,$buscar);
-        }
-        $alumno->obtener(false,"null");
+            $alumno->obtenerBuscando($buscar);
+        }else
+        $alumno->obtener();
         ?>
     </table>
 </div>

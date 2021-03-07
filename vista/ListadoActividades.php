@@ -27,9 +27,9 @@ include_once 'header.html';
         $actividad = new Actividad();
         if (isset($_REQUEST['busca'])) {
         $buscar =$_REQUEST['buscar'];
-        $actividad->obtener($buscar,true);
-        }
-        $actividad->obtener(false,"");
+        $actividad->obtenerBuscando($buscar);
+        }else
+        $actividad->obtener();
         ?>
     </table>
 </div>

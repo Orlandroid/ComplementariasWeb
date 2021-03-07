@@ -26,7 +26,7 @@ class Actividad
       }
 
 
-    public function obtener($buscando, $buscarValor)
+    public function obtener()
     {
         include_once 'conexion.php';
         include_once 'validaSesion.php';
@@ -36,9 +36,38 @@ class Actividad
         $consulta = "select a.idactividad,a.nombre,a.descripcion,a.cupo_limite,a.fecha,a.activo,i.nombre,i.a_paterno,i.a_materno
         from actividad a inner join
         instructor i on a.id_instructor=i.idinstructor";
-        if($buscando){
-            $consulta = $consulta . " where a.nombre like '%$buscarValor%'";
-        }
+        $reguistros = mysqli_query($con, $consulta) or
+                   die("Problema de conexion con la base de datos" . mysqli_error($con));
+                while ($reg = mysqli_fetch_array($reguistros)) {
+                   echo "<tr>";
+                   echo "<td>" . $reg['idactividad'] . "</td>";
+                   echo "<td>" . $reg[1] . "</td>";
+                   echo "<td>" . $reg['descripcion'] . "</td>";
+                   echo "<td>" . $reg['cupo_limite'] . "</td>";
+                   echo "<td>" . $reg['fecha'] . "</td>";
+                   echo "<td>" . $reg['activo'] . "</td>";
+                   echo "<td>" . $reg['nombre'] . "</td>";
+                   echo "<td>" . $reg['a_paterno'] . "</td>";
+                   echo "<td>" . $reg['a_materno'] . "</td>";
+                   $idactividad = $reg['idactividad'];
+                   echo "<td><a href='../controlador/CrudActividad.php?id=" . $reg['idactividad'] . "' class='btn btn-danger $habilita'>
+           Eliminar</a></td><td><a href='#' class='btn btn-primary' onclick='Editar($idactividad);'>actualizar</a>";
+                   echo  " </td>";
+                   echo "<tr>";
+               }
+               closeConexion($con);
+    }
+
+    public function obtenerBuscando($buscarValor)
+    {
+        include_once 'conexion.php';
+        include_once 'validaSesion.php';
+        $session = new Session();
+        $con = regresarConexion();
+        $habilita = $session->getHabilita();
+        $consulta = "select a.idactividad,a.nombre,a.descripcion,a.cupo_limite,a.fecha,a.activo,i.nombre,i.a_paterno,i.a_materno
+        from actividad a inner join
+        instructor i on a.id_instructor=i.idinstructor where a.nombre like '%$buscarValor%'";
         $reguistros = mysqli_query($con, $consulta) or
                    die("Problema de conexion con la base de datos" . mysqli_error($con));
                 while ($reg = mysqli_fetch_array($reguistros)) {

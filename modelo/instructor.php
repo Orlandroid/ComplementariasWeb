@@ -12,7 +12,7 @@
               closeConexion($con);
       }
 
-      public function obtener($buscando,$buscandoValor)
+      public function obtener()
       {
           include_once 'conexion.php';
           include_once 'validaSesion.php';
@@ -22,9 +22,38 @@
           inner join carreras c
           on i.idcarrera=c.idcarrera";
           $habilita = $session->getHabilita();
-          if($buscando){
-              $consulta = $consulta . " where i.nombre like '%$buscandoValor%'";
+          $reguistros = mysqli_query($con, $consulta) or
+              die("Problema de conexion con la base de datos" . mysqli_error($con));
+          while ($reg = mysqli_fetch_array($reguistros)) {
+              echo "<tr>";
+              echo "<td>" . $reg['idinstructor'] . "</td>";
+              echo "<td>" . $reg['nombre'] . "</td>";
+              echo "<td>" . $reg['sexo'] . "</td>";
+              echo "<td>" . $reg['a_paterno'] . "</td>";
+              echo "<td>" . $reg['a_materno'] . "</td>";
+              echo "<td>" . $reg['activo'] . "</td>";
+              echo "<td>" . $reg['carrera'] . "</td>";
+              $idinstructor = $reg['idinstructor'];
+              echo "<td><a href='../controlador/CrudInstrcutor.php?id=" . $reg['idinstructor'] . "' class='btn btn-danger $habilita'>
+              Eliminar</a></td><td>
+              <a href='#' class='btn btn-primary' onclick='Editar($idinstructor);'>
+              actualizar</a> ";
+              echo  " </td>";
+              echo "<tr>";
           }
+          closeConexion($con);
+      }
+
+      public function obtenerBuscando($buscandoValor)
+      {
+          include_once 'conexion.php';
+          include_once 'validaSesion.php';
+          $session = new Session();
+          $con = regresarConexion();
+          $consulta = "select i.idinstructor,i.nombre,i.sexo,i.a_paterno,i.a_materno,i.activo, c.carrera from instructor i
+          inner join carreras c
+          on i.idcarrera=c.idcarrera  where i.nombre like '%$buscandoValor%'";
+          $habilita = $session->getHabilita();
           $reguistros = mysqli_query($con, $consulta) or
               die("Problema de conexion con la base de datos" . mysqli_error($con));
           while ($reg = mysqli_fetch_array($reguistros)) {

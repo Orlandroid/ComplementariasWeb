@@ -29,9 +29,9 @@ include_once 'header.html';
         $instructor = new Instructor();
         if (isset($_REQUEST['busca'])) {
             $buscar = $_REQUEST['buscar'];
-           $instructor->obtener(true,$buscar);
-        }
-        $instructor->obtener(false,"");
+           $instructor->obtenerBuscando($buscar);
+        }else
+        $instructor->obtener();
         ?>
     </table>
 </div>

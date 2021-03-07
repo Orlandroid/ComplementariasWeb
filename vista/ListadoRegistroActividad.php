@@ -31,9 +31,9 @@ include_once 'header.html';
         $registrarse = new HistorialActividades();
         if (isset($_REQUEST['busca'])) {
             $buscar = $_REQUEST['buscar'];
-            $registrarse->obtener(true,$buscar);
-        }
-        $registrarse->obtener(false,"");
+            $registrarse->obtenerBuscando($buscar);
+        }else
+        $registrarse->obtener();
         ?>
     </table>
 </div>
